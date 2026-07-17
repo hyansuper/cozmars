@@ -1,0 +1,3 @@
+htmlmin
+jsmin
+csscompressor

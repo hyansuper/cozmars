@@ -1,0 +1,95 @@
+# This file was generated using idf.py save-defconfig or menuconfig [D] key. It can be edited manually.
+# Espressif IoT Development Framework (ESP-IDF) 6.0.2 Project Minimal Configuration
+#
+# default:
+CONFIG_IDF_TARGET="esp32s3"
+
+#
+# Serial flasher config
+#
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+# end of Serial flasher config
+
+#
+# Component config
+#
+
+#
+# ESP PSRAM
+#
+CONFIG_SPIRAM=y
+
+#
+# SPI RAM config
+#
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+# end of SPI RAM config
+# end of ESP PSRAM
+
+#
+# ESP-STDIO
+#
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+# end of ESP-STDIO
+
+
+#
+# Protocomm
+#
+CONFIG_ESP_PROTOCOMM_SUPPORT_SECURITY_VERSION_1=y
+# end of Protocomm
+
+#
+# Espressif Camera Sensors Configurations
+#
+
+#
+# Camera Sensor Configuration
+#
+
+#
+# Select and Set Camera Sensor
+#
+CONFIG_CAMERA_GC0308=y
+
+#
+# Choose supported formats for DVP interface
+#
+CONFIG_CAMERA_GC0308_DVP_GRAY_320X240_20FPS=y
+CONFIG_CAMERA_GC0308_DVP_GRAY_640X480_16FPS=y
+CONFIG_CAMERA_GC0308_DVP_RGB565_BE_320X240_20FPS=y
+CONFIG_CAMERA_GC0308_DVP_RGB565_BE_640X480_16FPS=y
+CONFIG_CAMERA_GC0308_DVP_YUV422_320X240_20FPS=y
+CONFIG_CAMERA_GC0308_DVP_YUV422_640X480_16FPS=y
+CONFIG_CAMERA_GC0308_DVP_YUV422_YUYV_320X240_20FPS=y
+CONFIG_CAMERA_GC0308_DVP_YUV422_YUYV_640X480_16FPS=y
+# end of Choose supported formats for DVP interface
+
+#
+# Select default output format for DVP interface
+#
+CONFIG_CAMERA_GC0308_DVP_DEFAULT_FMT_YUV422_YUYV_320X240_20FPS=y
+CONFIG_CAMERA_GC0308_DVP_IF_FORMAT_INDEX_DEFAULT=6
+# end of Select default output format for DVP interface
+# end of Select and Set Camera Sensor
+# end of Camera Sensor Configuration
+
+CONFIG_CAM_CTRL_SPI_ENABLE=n
+CONFIG_CAMERA_SENSOR_MOTOR_DETECT_METHOD_STATIC_STORE=y
+# end of Espressif Camera Sensors Configurations
+
+#
+# Audio Codec Device Configuration
+#
+CONFIG_CODEC_ES7243_SUPPORT=n
+CONFIG_CODEC_ES7243E_SUPPORT=n
+CONFIG_CODEC_ES8156_SUPPORT=n
+CONFIG_CODEC_AW88298_SUPPORT=n
+CONFIG_CODEC_ES8389_SUPPORT=n
+CONFIG_CODEC_ES8374_SUPPORT=n
+CONFIG_CODEC_ES8388_SUPPORT=n
+CONFIG_CODEC_TAS5805M_SUPPORT=n
+# end of Audio Codec Device Configuration
+# end of Component config

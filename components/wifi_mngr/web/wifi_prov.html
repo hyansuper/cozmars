@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>WiFi Setup</title>
+<style>
+body{font-family:sans-serif;margin:20px;background:#f5f5f5}
+.wrap{max-width:480px;margin:0 auto}
+h1{color:#333;font-size:24px;text-align:center}
+#status{padding:10px;border-radius:4px;margin:10px 0;display:none}
+.scan-btn,.connect-btn{padding:10px 20px;font-size:16px;cursor:pointer;border-radius:4px;border:none}
+.scan-btn{background:#2196f3;color:#fff}
+#ap-list{list-style:none;padding:0;margin:10px 0 0;max-height:240px;overflow-y:auto}
+#ap-list li{padding:10px;margin:4px 0;background:#fff;border:1px solid #ddd;border-radius:4px;cursor:pointer}
+#ap-list li.selected{background:#e3f2fd;border-color:#2196f3}
+#ap-list li .rssi{float:right;color:#666;font-size:14px}
+.box{margin-top:20px;padding:15px;background:#fff;border-radius:4px;border:1px solid #ddd}
+#connect-form p{margin:0 0 8px;color:#555}
+#connect-form input[type=text],#connect-form input[type=password]{width:100%;padding:8px;font-size:16px;box-sizing:border-box;margin-top:8px}
+.connect-btn{background:#4caf50;color:#fff;margin-top:10px}
+.connect-btn:disabled{background:#ccc;cursor:default}
+.loading{text-align:center;color:#666;padding:20px}
+</style>
+</head>
+<body>
+<div class='wrap'>
+<h1>WiFi Setup</h1>
+<div id='connect-form' class='box'>
+<p>Enter your network name and password.</p>
+<input type='text' id='ssid' placeholder='SSID' onkeydown='if(event.key==="Enter")document.getElementById("password").focus()'>
+<input type='password' id='password' placeholder='WiFi password' onkeydown='if(event.key==="Enter")connect()'>
+<br><button class='connect-btn' onclick='connect()'>Connect</button>
+</div>
+<div id='status'></div>
+<div class='box'>
+<button class='scan-btn' onclick='scan()'>Scan</button>
+<ul id='ap-list'><li class='loading'>Scanning...</li></ul>
+</div>
+<script>
+function stat(m,c){var s=document.getElementById('status');s.textContent=m;s.style.display='block';s.style.background=c||'#fff3cd'}
+function scan(){
+  document.getElementById('ap-list').innerHTML='<li class="loading">Scanning...</li>';
+  fetch('/scan').then(function(r){return r.json()}).then(function(d){
+    var ul=document.getElementById('ap-list');ul.innerHTML='';
+    if(!d.aps||d.aps.length===0){ul.innerHTML='<li>No networks found</li>';return}
+    for(var i=0;i<d.aps.length;i++){
+      var li=document.createElement('li');
+      li.textContent=d.aps[i].ssid+'  ('+d.aps[i].rssi+'dBm)';
+      li.onclick=function(s){return function(){pick(s)}}(d.aps[i].ssid);
+      ul.appendChild(li)
+    }
+    stat('Found '+d.aps.length+' networks','#d4edda')
+  })['catch'](function(e){stat('Scan failed','#f8d7da');document.getElementById('ap-list').innerHTML='<li>Scan failed</li>'})
+}
+function pick(s){
+  var items=document.querySelectorAll('#ap-list li');
+  for(var i=0;i<items.length;i++)items[i].classList.remove('selected');
+  event.target.classList.add('selected');
+  document.getElementById('ssid').value=s
+}
+function connect(){
+  var s=document.getElementById('ssid').value.trim();
+  var p=document.getElementById('password').value;
+  if(!s){alert('Enter SSID');return}
+  if(!p){alert('Enter password');return}
+  stat('Connecting...');
+  var f=new FormData();f.append('ssid',s);f.append('password',p);
+  fetch('/connect',{method:'POST',body:new URLSearchParams(f)}).then(function(r){return r.json()}).then(function(d){
+    if(d.status==='ok'){stat('Connected! Rebooting...','#d4edda');setTimeout(function(){location.reload()},2000)}
+    else{stat('Failed: '+d.message,'#f8d7da')}
+  })['catch'](function(e){stat('Error','#f8d7da')})
+}
+setTimeout(scan,300)
+</script>
+</div>
+</body>
+</html>
