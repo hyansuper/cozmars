@@ -84,13 +84,16 @@ void app_main(void)
     ESP_ERROR_CHECK(wled_fade1(blue, 500, 500, 3));
     wait_ms(3 * (500 + 500));
 
-    /* --- Motors: forward/backward 5 cm at 50% throttle --- */
+    /* if the robot is raised above ground in test, turn off cliff detection */
+    subc_cliff_detection(false);
+
+    /* --- Motors: forward/backward at 50% throttle --- */
     ESP_LOGI(TAG, "forward");
-    ESP_ERROR_CHECK(motors_go_dist(THROTTLE, 50)); /* distance in mm */
+    ESP_ERROR_CHECK(motors_set_throttle(THROTTLE, 0)); /* distance in mm */
     wait_ms(2000);
 
     ESP_LOGI(TAG, "backward");
-    ESP_ERROR_CHECK(motors_go_dist(-THROTTLE, 50));
+    ESP_ERROR_CHECK(motors_set_throttle(-THROTTLE, 0));
     wait_ms(2000);
 
     /* --- Rotation: left/right for 1 s at 50% throttle --- */

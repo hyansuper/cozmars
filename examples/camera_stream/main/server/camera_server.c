@@ -26,11 +26,17 @@ static const server_rsc_t s_root_rsc = {
     .encoding = SERV_ENC_GZIP,
 };
 
-/* ---------- state ---------- */
+
+#ifndef CONFIG_CAMERA_GC0308_DVP_DEFAULT_FMT_YUV422_YUYV_320X240_20FPS
+#error "below config only works if you select CONFIG_CAMERA_GC0308_DVP_DEFAULT_FMT_YUV422_YUYV_320X240_20FPS"
+#endif
 
 #define CAM_WIDTH      320
 #define CAM_HEIGHT     240
+#define JPEG_SRC_FMT   JPEG_PIXEL_FORMAT_YCbYCr
 #define JPEG_BUF_SIZE  (64 * 1024)
+
+/* ---------- state ---------- */
 
 static httpd_handle_t     s_server;
 static SemaphoreHandle_t  s_cam_lock;
@@ -46,7 +52,7 @@ static esp_err_t jpeg_enc_ensure(void)
     jpeg_enc_config_t cfg = DEFAULT_JPEG_ENC_CONFIG();
     cfg.width        = CAM_WIDTH;
     cfg.height       = CAM_HEIGHT;
-    cfg.src_type     = JPEG_PIXEL_FORMAT_YCbYCr;
+    cfg.src_type     = JPEG_SRC_FMT;
     cfg.subsampling  = JPEG_SUBSAMPLE_420;
     cfg.quality      = 40;
     if (jpeg_enc_open(&cfg, &s_jpeg_enc) != JPEG_ERR_OK) {

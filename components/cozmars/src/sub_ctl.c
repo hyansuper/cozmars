@@ -70,6 +70,13 @@ esp_err_t subc_reset(void)
     return subc_send_msg(&(sub_msg_t){.type=SUB_MSG_WR_POWER, .power_cmd.type=POWER_CMD_REBOOT});
 }
 
+esp_err_t subc_cliff_detection(bool en)
+{
+    return subc_send_msg(&(sub_msg_t){.type=SUB_MSG_WR_CONFIG,
+                                     .config_cmd.type=CONFIG_CMD_DISABLE_CLIFF_DETECTION,
+                                     .config_cmd.disable_cliff_detection=!en});
+}
+
 esp_err_t subc_init(void)
 {
     i2c_device_config_t dev_cfg = {

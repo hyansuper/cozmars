@@ -15,10 +15,6 @@
 #include "wifi.h"
 #include "server_util.h"
 
-
-// #define USE_DHCP_CAPTIVEPORTAL
-
-
 extern const uint8_t wifi_prov_html_gz_start[] asm("_binary_wifi_prov_html_gz_start");
 extern const uint8_t wifi_prov_html_gz_end[]   asm("_binary_wifi_prov_html_gz_end");
 
@@ -366,6 +362,9 @@ esp_err_t wifi_init(void)
 
     dns_server_config_t dns_cfg = DNS_SERVER_CONFIG_SINGLE("*", "WIFI_AP_DEF");
     start_dns_server(&dns_cfg);
+
+
+// #define USE_DHCP_CAPTIVEPORTAL
 
 #ifdef USE_DHCP_CAPTIVEPORTAL
     esp_netif_ip_info_t ip_info;

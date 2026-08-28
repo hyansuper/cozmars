@@ -1,6 +1,6 @@
 #pragma once
 #include "esp_err.h"
-
+#include "esp_wifi.h"
 
 esp_err_t wifi_init(void);
 esp_err_t wifi_get_rssi(int8_t *rssi); // only useful in sta mode
